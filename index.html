@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Famous Person Presentation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --blue:       #3B82F6;
+      --blue-light: #EFF6FF;
+      --blue-mid:   #DBEAFE;
+      --blue-dark:  #1D4ED8;
+      --blue-soft:  #93C5FD;
+      --text:       #1E3A5F;
+      --muted:      #64A0C8;
+      --white:      #FFFFFF;
+      --border:     #BFDBFE;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--blue-light);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ═══════════ FORM PAGE ═══════════ */
+    #formPage {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+      animation: fadeUp .55s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-hero { text-align: center; margin-bottom: 2.5rem; }
+    .form-hero h1 {
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 900;
+      color: var(--blue-dark);
+      line-height: 1.15;
+    }
+    .form-hero h1 span { color: var(--blue); font-style: italic; font-family: 'Lora', serif; }
+    .form-hero p { margin-top: .6rem; color: var(--muted); font-size: 1rem; }
+
+    .card {
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.2rem;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .card:focus-within { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(59,130,246,.1); }
+
+    .card-label {
+      display: flex; align-items: center; gap: .5rem;
+      font-size: .75rem; font-weight: 800; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--blue); margin-bottom: .9rem;
+    }
+    .card-label .icon {
+      width: 28px; height: 28px; background: var(--blue-mid);
+      border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; font-size: 1rem;
+    }
+
+    .field-input {
+      width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+      padding: .65rem 1rem; font-family: 'Nunito', sans-serif;
+      font-size: .97rem; color: var(--text); background: var(--blue-light); outline: none;
+      transition: border-color .2s;
+    }
+    .field-input:focus { border-color: var(--blue); background: var(--white); }
+    .field-input::placeholder { color: #A8C8E8; }
+    textarea.field-input { resize: vertical; min-height: 70px; }
+
+    .field-hint { font-size: .78rem; color: var(--muted); margin-top: .4rem; }
+
+    .btn-options { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .3rem; }
+
+    .opt-btn {
+      padding: .4rem .95rem; border: 2px solid var(--border);
+      border-radius: 999px; background: var(--blue-light); color: var(--text);
+      font-family: 'Nunito', sans-serif; font-size: .83rem; font-weight: 700;
+      cursor: pointer; transition: all .15s; user-select: none;
+    }
+    .opt-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-mid); }
+    .opt-btn.sel   { background: var(--blue); border-color: var(--blue); color: var(--white); }
+
+    .add-btn {
+      padding: .38rem .9rem; border: 2px solid var(--border);
+      border-radius: 999px; background: var(--white); color: var(--text);
+      font-family: 'Nunito', sans-serif; font-size: .82rem; font-weight: 700;
+      cursor: pointer; transition: all .15s;
+    }
+    .add-btn:hover { border-color: var(--blue-soft); color: var(--blue-dark); background: var(--blue-mid); }
+
+    .or-divider {
+      display: flex; align-items: center; gap: .6rem;
+      font-size: .73rem; color: var(--muted); font-weight: 800;
+      text-transform: uppercase; letter-spacing: .08em; margin: .65rem 0 .5rem;
+    }
+    .or-divider::before, .or-divider::after { content:''; flex:1; height:1px; background: var(--border); }
+
+    .trait-tag {
+      padding: .42rem 1rem; border: 2px solid var(--border); border-radius: 999px;
+      background: var(--white); color: var(--text); font-family: 'Nunito', sans-serif;
+      font-size: .84rem; font-weight: 700; cursor: pointer; transition: all .15s; user-select: none;
+    }
+    .trait-tag:hover { border-color: var(--blue-soft); }
+    .trait-tag.sel   { background: var(--blue); border-color: var(--blue); color: var(--white); }
+
+    /* Character value buttons — larger with emoji */
+    .char-val-btn {
+      display: flex; flex-direction: column; align-items: center; gap: .25rem;
+      padding: .6rem .8rem; border: 2px solid var(--border);
+      border-radius: 14px; background: var(--white); color: var(--text);
+      font-family: 'Nunito', sans-serif; font-size: .76rem; font-weight: 700;
+      cursor: pointer; transition: all .15s; text-align: center; min-width: 70px;
+    }
+    .char-val-btn .cv-emoji { font-size: 1.4rem; }
+    .char-val-btn .cv-label { font-size: .72rem; color: var(--muted); }
+    .char-val-btn:hover { border-color: var(--blue); background: var(--blue-mid); }
+
+    .char-val-grid {
+      display: flex; flex-wrap: wrap; gap: .55rem; margin-bottom: .5rem;
+    }
+
+    .btn-generate {
+      width: 100%; margin-top: 1.75rem; padding: 1.05rem;
+      background: var(--blue); color: var(--white); border: none;
+      border-radius: 14px; font-family: 'Nunito', sans-serif;
+      font-size: 1.05rem; font-weight: 900; letter-spacing: .04em;
+      cursor: pointer; transition: background .2s, transform .15s;
+      box-shadow: 0 4px 18px rgba(59,130,246,.35);
+    }
+    .btn-generate:hover { background: var(--blue-dark); transform: translateY(-2px); }
+
+    /* ═══════════ PRESENTATION PAGE ═══════════ */
+    #presentationPage { display: none; padding: 2rem 1.5rem 3rem; animation: fadeUp .5s ease both; }
+
+    .pres-topbar {
+      display: flex; justify-content: space-between; align-items: center;
+      max-width: 860px; margin: 0 auto 1.5rem;
+    }
+
+    .btn-sm {
+      padding: .45rem 1.2rem; border-radius: 9px;
+      font-family: 'Nunito', sans-serif; font-size: .86rem; font-weight: 800;
+      cursor: pointer; transition: all .15s;
+    }
+    .btn-outline { border: 2px solid var(--border); background: var(--white); color: var(--muted); }
+    .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+    .btn-solid   { background: var(--blue); color: var(--white); border: 2px solid var(--blue); }
+    .btn-solid:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+
+    /* Download button */
+    .btn-download {
+      display: inline-flex; align-items: center; gap: .45rem;
+      padding: .45rem 1.2rem; border-radius: 9px;
+      font-family: 'Nunito', sans-serif; font-size: .86rem; font-weight: 800;
+      cursor: pointer; transition: all .15s;
+      background: #22C55E; color: var(--white); border: 2px solid #22C55E;
+    }
+    .btn-download:hover { background: #16A34A; border-color: #16A34A; }
+    .btn-download.loading { opacity: .7; pointer-events: none; }
+
+    /* Download all button */
+    .btn-dl-all {
+      display: inline-flex; align-items: center; gap: .45rem;
+      padding: .55rem 1.4rem; border-radius: 9px;
+      font-family: 'Nunito', sans-serif; font-size: .88rem; font-weight: 900;
+      cursor: pointer; transition: all .15s;
+      background: #F97316; color: var(--white); border: 2px solid #F97316;
+    }
+    .btn-dl-all:hover { background: #EA580C; border-color: #EA580C; }
+
+    .slide-counter { font-size: .86rem; font-weight: 800; color: var(--muted); }
+
+    /* Bottom bar */
+    .pres-bottombar {
+      display: flex; justify-content: center; align-items: center;
+      gap: 1rem; max-width: 860px; margin: 1.2rem auto 0;
+      flex-wrap: wrap;
+    }
+
+    .slides-wrap { max-width: 860px; margin: 0 auto; }
+
+    .slide {
+      display: none; background: var(--white); border: 2px solid var(--border);
+      border-radius: 24px; min-height: 500px; position: relative;
+      overflow: hidden; padding: 3rem 3.5rem 4rem;
+      box-shadow: 0 8px 40px rgba(59,130,246,.1);
+      animation: slideIn .4s cubic-bezier(.22,.68,0,1.15) both;
+    }
+    @keyframes slideIn { from { opacity:0; transform:scale(.97); } to { opacity:1; transform:scale(1); } }
+    .slide.active { display: flex; flex-direction: column; }
+    .slide::before {
+      content: ''; position: absolute; top: -90px; right: -90px;
+      width: 320px; height: 320px; border-radius: 50%;
+      background: var(--blue-light); z-index: 0;
+    }
+    .slide > * { position: relative; z-index: 1; }
+
+    .s-eyebrow { font-size: .72rem; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; color: var(--blue); margin-bottom: .45rem; }
+    .s-title   { font-family: 'Lora', serif; font-size: clamp(1.7rem, 4vw, 2.7rem); font-weight: 600; color: var(--text); line-height: 1.2; }
+    .s-divider { width: 50px; height: 4px; border-radius: 2px; background: var(--blue); margin: .9rem 0 1.2rem; }
+
+    .profile-para { font-size: 1.02rem; line-height: 1.85; color: #4A6FA5; max-width: 600px; }
+    .profile-para strong { color: var(--text); }
+
+    .meta-row   { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.4rem; }
+    .meta-chip  { display: flex; flex-direction: column; background: var(--blue-light); border: 1.5px solid var(--border); border-radius: 12px; padding: .5rem 1rem; font-size: .88rem; font-weight: 700; color: var(--text); }
+    .meta-chip .chip-lbl { font-size: .62rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; color: var(--blue); margin-bottom: .15rem; }
+
+    .looks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1rem; margin-top: .5rem; }
+    .looks-card { background: var(--blue-light); border: 1.5px solid var(--border); border-radius: 14px; padding: 1rem 1.1rem; }
+    .looks-card .lc-lbl { font-size: .65rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; color: var(--blue); margin-bottom: .3rem; }
+    .looks-card .lc-val { font-size: .97rem; font-weight: 700; color: var(--text); }
+
+    .s-body { font-size: .97rem; color: #4A6FA5; line-height: 1.8; max-width: 640px; margin-bottom: 1.4rem; }
+
+    .trait-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(178px, 1fr)); gap: .9rem; margin-top: .5rem; }
+    .trait-card { background: var(--blue-light); border: 1.5px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem; transition: border-color .2s, transform .2s; }
+    .trait-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+    .trait-card .tc-emoji { font-size: 1.5rem; margin-bottom: .4rem; }
+    .trait-card .tc-name  { font-size: .9rem; font-weight: 800; color: var(--text); }
+    .trait-card .tc-desc  { font-size: .75rem; color: var(--muted); margin-top: .2rem; line-height: 1.5; }
+
+    .quote-inner { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 1rem 0; }
+    .big-quote   { font-family: 'Lora', serif; font-size: 5rem; color: var(--blue-soft); line-height: .65; margin-bottom: 1.2rem; }
+    .quote-body  { font-family: 'Lora', serif; font-size: clamp(1.15rem, 2.5vw, 1.6rem); font-style: italic; color: var(--text); max-width: 580px; line-height: 1.65; }
+    .quote-attr  { margin-top: 1.2rem; font-size: .88rem; font-weight: 800; color: var(--blue); letter-spacing: .05em; }
+
+    .dot-row { position: absolute; bottom: 1.4rem; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; }
+    .dot { width: 26px; height: 4px; border-radius: 2px; background: var(--border); transition: background .25s, width .25s; }
+    .dot.active { background: var(--blue); width: 38px; }
+
+    /* PDF toast */
+    .toast {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      background: #1E3A5F; color: white; padding: .7rem 1.5rem;
+      border-radius: 999px; font-size: .88rem; font-weight: 700;
+      box-shadow: 0 4px 20px rgba(0,0,0,.2); z-index: 9999;
+      opacity: 0; transition: opacity .3s; pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+
+    @media (max-width: 560px) {
+      .slide { padding: 2rem 1.5rem 3.5rem; min-height: auto; }
+      .looks-grid, .trait-grid { grid-template-columns: 1fr 1fr; }
+      .char-val-btn { min-width: 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═════════════════════ FORM PAGE ═════════════════════ -->
+<div id="formPage">
+  <div class="form-hero">
+    <h1>Famous Person<br><span>Presentation Maker</span></h1>
+    <p>Click the buttons to fill in the info — or type your own! 🎉</p>
+  </div>
+
+  <!-- Name -->
+  <div class="card">
+    <div class="card-label"><span class="icon">👤</span> Full Name</div>
+    <input id="fName" class="field-input" type="text" placeholder="e.g. Vincent van Gogh">
+  </div>
+
+  <!-- Profession -->
+  <div class="card">
+    <div class="card-label"><span class="icon">🎯</span> Profession</div>
+    <div class="btn-options">
+      <button class="opt-btn" onclick="pick('fProfession','Painter',this)">🎨 Painter</button>
+      <button class="opt-btn" onclick="pick('fProfession','Writer',this)">✍️ Writer</button>
+      <button class="opt-btn" onclick="pick('fProfession','Scientist',this)">🔬 Scientist</button>
+      <button class="opt-btn" onclick="pick('fProfession','Musician',this)">🎵 Musician</button>
+      <button class="opt-btn" onclick="pick('fProfession','Athlete',this)">🏅 Athlete</button>
+      <button class="opt-btn" onclick="pick('fProfession','Politician',this)">🏛️ Politician</button>
+      <button class="opt-btn" onclick="pick('fProfession','Inventor',this)">💡 Inventor</button>
+      <button class="opt-btn" onclick="pick('fProfession','Explorer',this)">🧭 Explorer</button>
+      <button class="opt-btn" onclick="pick('fProfession','Actor',this)">🎬 Actor</button>
+      <button class="opt-btn" onclick="pick('fProfession','Doctor',this)">🩺 Doctor</button>
+    </div>
+    <div class="or-divider">or type your own</div>
+    <input id="fProfession" class="field-input" type="text" placeholder="e.g. Painter">
+  </div>
+
+  <!-- Born -->
+  <div class="card">
+    <div class="card-label"><span class="icon">🌍</span> Born & Country</div>
+    <input id="fBorn" class="field-input" type="text" placeholder="e.g. 1853 · Zundert, Netherlands">
+    <p class="field-hint">Write the year and country of birth.</p>
+  </div>
+
+  <!-- Known For -->
+  <div class="card">
+    <div class="card-label"><span class="icon">⭐</span> Known For</div>
+    <div class="btn-options">
+      <button class="opt-btn" onclick="pick('fKnownFor','Beautiful and emotional paintings',this)">🖼️ Paintings</button>
+      <button class="opt-btn" onclick="pick('fKnownFor','Groundbreaking scientific discoveries',this)">🔭 Science</button>
+      <button class="opt-btn" onclick="pick('fKnownFor','Powerful speeches and leadership',this)">🗣️ Leadership</button>
+      <button class="opt-btn" onclick="pick('fKnownFor','Incredible music and songs',this)">🎶 Music</button>
+      <button class="opt-btn" onclick="pick('fKnownFor','Amazing writing and stories',this)">📚 Writing</button>
+      <button class="opt-btn" onclick="pick('fKnownFor','Historic sports achievements',this)">🏆 Sports</button>
+      <button class="opt-btn" onclick="pick('fKnownFor','Important inventions that changed the world',this)">💡 Inventions</button>
+      <button class="opt-btn" onclick="pick('fKnownFor','Fighting for human rights and equality',this)">✊ Human Rights</button>
+    </div>
+    <div class="or-divider">or type your own</div>
+    <input id="fKnownFor" class="field-input" type="text" placeholder="e.g. Swirling expressive paintings">
+  </div>
+
+  <!-- Hair -->
+  <div class="card">
+    <div class="card-label"><span class="icon">💇</span> Hair Color</div>
+    <div class="btn-options">
+      <button class="opt-btn" onclick="pick('fHair','Black',this)">🖤 Black</button>
+      <button class="opt-btn" onclick="pick('fHair','Dark brown',this)">🟤 Dark brown</button>
+      <button class="opt-btn" onclick="pick('fHair','Light brown',this)">🟫 Light brown</button>
+      <button class="opt-btn" onclick="pick('fHair','Reddish-orange',this)">🟠 Reddish-orange</button>
+      <button class="opt-btn" onclick="pick('fHair','Blonde',this)">🌾 Blonde</button>
+      <button class="opt-btn" onclick="pick('fHair','White',this)">🩶 White</button>
+      <button class="opt-btn" onclick="pick('fHair','Grey',this)">🔘 Grey</button>
+      <button class="opt-btn" onclick="pick('fHair','Bald',this)">✨ Bald</button>
+    </div>
+    <div class="or-divider">or type your own</div>
+    <input id="fHair" class="field-input" type="text" placeholder="e.g. Reddish-orange hair and beard">
+  </div>
+
+  <!-- Eyes -->
+  <div class="card">
+    <div class="card-label"><span class="icon">👁️</span> Eye Color</div>
+    <div class="btn-options">
+      <button class="opt-btn" onclick="pick('fEyes','Brown',this)">🟤 Brown</button>
+      <button class="opt-btn" onclick="pick('fEyes','Dark brown',this)">⚫ Dark brown</button>
+      <button class="opt-btn" onclick="pick('fEyes','Blue',this)">🔵 Blue</button>
+      <button class="opt-btn" onclick="pick('fEyes','Light blue',this)">💠 Light blue</button>
+      <button class="opt-btn" onclick="pick('fEyes','Green',this)">🟢 Green</button>
+      <button class="opt-btn" onclick="pick('fEyes','Hazel',this)">🍂 Hazel</button>
+      <button class="opt-btn" onclick="pick('fEyes','Grey',this)">🩶 Grey</button>
+      <button class="opt-btn" onclick="pick('fEyes','Black',this)">⚫ Black</button>
+    </div>
+    <div class="or-divider">or type your own</div>
+    <input id="fEyes" class="field-input" type="text" placeholder="e.g. Green">
+  </div>
+
+  <!-- Style -->
+  <div class="card">
+    <div class="card-label"><span class="icon">👔</span> Style & Look</div>
+    <div class="btn-options">
+      <button class="opt-btn" onclick="pick('fStyle','Simple and casual clothing',this)">👕 Casual</button>
+      <button class="opt-btn" onclick="pick('fStyle','Elegant and formal attire',this)">🎩 Formal</button>
+      <button class="opt-btn" onclick="pick('fStyle','Traditional cultural clothing',this)">🌺 Traditional</button>
+      <button class="opt-btn" onclick="pick('fStyle','Rough look with a beard',this)">🧔 Beard & rough</button>
+      <button class="opt-btn" onclick="pick('fStyle','Colorful artistic outfits',this)">🎨 Artistic</button>
+      <button class="opt-btn" onclick="pick('fStyle','Sporty and athletic wear',this)">🏋️ Athletic</button>
+      <button class="opt-btn" onclick="pick('fStyle','Military or official uniform',this)">🪖 Uniform</button>
+    </div>
+    <div class="or-divider">or type your own</div>
+    <input id="fStyle" class="field-input" type="text" placeholder="e.g. Worn work clothes, often paint-stained">
+  </div>
+
+  <!-- Appearance description -->
+  <div class="card">
+    <div class="card-label"><span class="icon">🖊️</span> Describe Their Appearance</div>
+    <p class="field-hint" style="margin-bottom:.75rem">Click buttons to add details, or write your own.</p>
+    <div class="btn-options">
+      <button class="add-btn" onclick="addTo('fAppearance','Tall and slim build.')">➕ Tall & slim</button>
+      <button class="add-btn" onclick="addTo('fAppearance','Short and stocky build.')">➕ Short & stocky</button>
+      <button class="add-btn" onclick="addTo('fAppearance','Athletic and strong body.')">➕ Athletic body</button>
+      <button class="add-btn" onclick="addTo('fAppearance','Wore glasses.')">➕ Wore glasses</button>
+      <button class="add-btn" onclick="addTo('fAppearance','Had a long beard.')">➕ Long beard</button>
+      <button class="add-btn" onclick="addTo('fAppearance','Thin and delicate frame.')">➕ Thin frame</button>
+      <button class="add-btn" onclick="addTo('fAppearance','Had an intense, serious expression.')">➕ Intense look</button>
+      <button class="add-btn" onclick="addTo('fAppearance','Often looked sad or deep in thought.')">➕ Sad expression</button>
+      <button class="add-btn" onclick="addTo('fAppearance','Always well-dressed and neat.')">➕ Well-dressed</button>
+    </div>
+    <div class="or-divider">write your own</div>
+    <textarea id="fAppearance" class="field-input" placeholder="e.g. Thin face with a red beard. Deep-set intense eyes. Often looked serious and tired."></textarea>
+  </div>
+
+  <!-- Personality Traits -->
+  <div class="card">
+    <div class="card-label"><span class="icon">💡</span> Personality Traits</div>
+    <p class="field-hint" style="margin-bottom:.75rem">Click all words that describe them:</p>
+    <div class="btn-options" id="traitTags">
+      <button class="trait-tag" data-e="💪" data-d="Faced challenges with great courage." onclick="this.classList.toggle('sel')">💪 Brave</button>
+      <button class="trait-tag" data-e="🎨" data-d="Saw the world through a unique, imaginative lens." onclick="this.classList.toggle('sel')">🎨 Creative</button>
+      <button class="trait-tag" data-e="🧠" data-d="Thought deeply and solved complex problems." onclick="this.classList.toggle('sel')">🧠 Intelligent</button>
+      <button class="trait-tag" data-e="❤️" data-d="Showed great empathy and care for others." onclick="this.classList.toggle('sel')">❤️ Kind</button>
+      <button class="trait-tag" data-e="🔥" data-d="Never gave up, no matter the obstacle." onclick="this.classList.toggle('sel')">🔥 Determined</button>
+      <button class="trait-tag" data-e="✨" data-d="Drew people in with magnetic energy." onclick="this.classList.toggle('sel')">✨ Charismatic</button>
+      <button class="trait-tag" data-e="🙏" data-d="Stayed grounded despite great success." onclick="this.classList.toggle('sel')">🙏 Humble</button>
+      <button class="trait-tag" data-e="🔭" data-d="Imagined futures others could not yet see." onclick="this.classList.toggle('sel')">🔭 Visionary</button>
+      <button class="trait-tag" data-e="🛡️" data-d="Bounced back from hardship stronger than before." onclick="this.classList.toggle('sel')">🛡️ Resilient</button>
+      <button class="trait-tag" data-e="🌟" data-d="Pursued their purpose with intense dedication." onclick="this.classList.toggle('sel')">🌟 Passionate</button>
+      <button class="trait-tag" data-e="🤫" data-d="Preferred quiet and solitude over crowds." onclick="this.classList.toggle('sel')">🤫 Shy</button>
+      <button class="trait-tag" data-e="😤" data-d="Had a fiery and emotional temperament." onclick="this.classList.toggle('sel')">😤 Hot-tempered</button>
+      <button class="trait-tag" data-e="🤔" data-d="Always asking questions and seeking truth." onclick="this.classList.toggle('sel')">🤔 Curious</button>
+      <button class="trait-tag" data-e="😢" data-d="Struggled with sadness and loneliness." onclick="this.classList.toggle('sel')">😢 Lonely</button>
+      <button class="trait-tag" data-e="🤝" data-d="Always ready to help and support others." onclick="this.classList.toggle('sel')">🤝 Generous</button>
+      <button class="trait-tag" data-e="🎭" data-d="Full of imagination and wonder." onclick="this.classList.toggle('sel')">🎭 Imaginative</button>
+    </div>
+  </div>
+
+  <!-- ★ Character & Values — expanded with emoji buttons ★ -->
+  <div class="card">
+    <div class="card-label"><span class="icon">📖</span> Character & Values</div>
+    <p class="field-hint" style="margin-bottom:.85rem">Click a value to add it to the description, or write your own below.</p>
+
+    <div class="char-val-grid">
+      <!-- Passions & Work -->
+      <button class="char-val-btn" onclick="addTo('fCharacter','Was deeply passionate about their work and never stopped improving.')">
+        <span class="cv-emoji">🔥</span><strong>Passionate</strong><span class="cv-label">Loved their work</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Was very dedicated and worked extremely hard every single day.')">
+        <span class="cv-emoji">💪</span><strong>Hardworking</strong><span class="cv-label">Never lazy</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Spent many hours alone creating and thinking deeply.')">
+        <span class="cv-emoji">🕯️</span><strong>Focused</strong><span class="cv-label">Deep concentration</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Always wanted to learn new things and grow as a person.')">
+        <span class="cv-emoji">📚</span><strong>Curious</strong><span class="cv-label">Loved learning</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Had a huge imagination and was always creating something new.')">
+        <span class="cv-emoji">🎨</span><strong>Creative</strong><span class="cv-label">Full of ideas</span>
+      </button>
+
+      <!-- Social & Relationships -->
+      <button class="char-val-btn" onclick="addTo('fCharacter','Did not have many close friends and preferred to be alone.')">
+        <span class="cv-emoji">🤫</span><strong>Few Friends</strong><span class="cv-label">Preferred solitude</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Cared deeply about other people and always tried to help.')">
+        <span class="cv-emoji">❤️</span><strong>Caring</strong><span class="cv-label">Helped others</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Was very kind and generous, always sharing what they had.')">
+        <span class="cv-emoji">🤝</span><strong>Generous</strong><span class="cv-label">Gave to others</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Was loved and respected by many people around the world.')">
+        <span class="cv-emoji">🌍</span><strong>Respected</strong><span class="cv-label">Admired by many</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Was a natural leader who inspired others to follow and believe.')">
+        <span class="cv-emoji">👑</span><strong>Leader</strong><span class="cv-label">Inspired people</span>
+      </button>
+
+      <!-- Struggles & Hardships -->
+      <button class="char-val-btn" onclick="addTo('fCharacter','People often misunderstood them and did not appreciate their talent.')">
+        <span class="cv-emoji">😕</span><strong>Misunderstood</strong><span class="cv-label">Not appreciated</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Some people thought he/she was strange or even crazy.')">
+        <span class="cv-emoji">🌀</span><strong>Called Crazy</strong><span class="cv-label">Seen as strange</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Struggled with personal difficulties and hardship throughout life.')">
+        <span class="cv-emoji">😔</span><strong>Struggled</strong><span class="cv-label">Hard life</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Was very poor for most of their life and had little money.')">
+        <span class="cv-emoji">💸</span><strong>Very Poor</strong><span class="cv-label">Had little money</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Faced a lot of rejection but never gave up on their dream.')">
+        <span class="cv-emoji">🚪</span><strong>Rejected</strong><span class="cv-label">Kept going anyway</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Was only recognized as a genius after they died.')">
+        <span class="cv-emoji">⏳</span><strong>Not Famous in Life</strong><span class="cv-label">Famous after death</span>
+      </button>
+
+      <!-- Beliefs & Values -->
+      <button class="char-val-btn" onclick="addTo('fCharacter','Had very strong beliefs and values and never changed them.')">
+        <span class="cv-emoji">🗿</span><strong>Strong Beliefs</strong><span class="cv-label">Never changed</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Believed that art, music or writing could change the world.')">
+        <span class="cv-emoji">🌟</span><strong>Believed in Art</strong><span class="cv-label">Art changes life</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Fought for justice and believed every person deserved equal rights.')">
+        <span class="cv-emoji">⚖️</span><strong>Justice</strong><span class="cv-label">Fought for equality</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Was very religious and believed strongly in God and faith.')">
+        <span class="cv-emoji">🙏</span><strong>Religious</strong><span class="cv-label">Strong faith</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Always told the truth, even when it was difficult.')">
+        <span class="cv-emoji">✅</span><strong>Honest</strong><span class="cv-label">Always truthful</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Was brave and faced danger without fear.')">
+        <span class="cv-emoji">🦁</span><strong>Courageous</strong><span class="cv-label">No fear</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Loved nature and the beauty of the world around them.')">
+        <span class="cv-emoji">🌿</span><strong>Nature Lover</strong><span class="cv-label">Loved the outdoors</span>
+      </button>
+      <button class="char-val-btn" onclick="addTo('fCharacter','Left behind a great legacy that still inspires people today.')">
+        <span class="cv-emoji">🏛️</span><strong>Great Legacy</strong><span class="cv-label">Remembered forever</span>
+      </button>
+    </div>
+
+    <div class="or-divider">write your own</div>
+    <textarea id="fCharacter" class="field-input" placeholder="Describe their values, how they treated people, what they believed in…"></textarea>
+  </div>
+
+  <!-- Quote -->
+  <div class="card">
+    <div class="card-label"><span class="icon">💬</span> Famous Quote (optional)</div>
+    <input id="fQuote" class="field-input" type="text" placeholder='e.g. "I dream of painting and then I paint my dream."'>
+  </div>
+
+  <button class="btn-generate" onclick="generatePresentation()">✨ Generate My Presentation</button>
+</div>
+
+
+<!-- ═════════════════════ PRESENTATION PAGE ═════════════════════ -->
+<div id="presentationPage">
+  <div class="pres-topbar">
+    <button class="btn-sm btn-outline" onclick="goBack()">← Edit</button>
+    <span class="slide-counter" id="slideCounter">1 / 5</span>
+    <button class="btn-sm btn-solid" id="nextBtn" onclick="nextSlide()">Next →</button>
+  </div>
+
+  <div class="slides-wrap">
+    <div class="slide active" id="slide1">
+      <div class="s-eyebrow" id="cov-eye">FAMOUS PERSON</div>
+      <div class="s-title"   id="cov-name">Name</div>
+      <div class="s-divider"></div>
+      <p class="profile-para" id="cov-para"></p>
+      <div class="meta-row"  id="cov-meta"></div>
+      <div class="dot-row"   id="dots1"></div>
+    </div>
+
+    <div class="slide" id="slide2">
+      <div class="s-eyebrow">PHYSICAL APPEARANCE</div>
+      <div class="s-title" id="app-title">How They Looked</div>
+      <div class="s-divider"></div>
+      <p class="s-body" id="app-body"></p>
+      <div class="looks-grid" id="looks-grid"></div>
+      <div class="dot-row" id="dots2"></div>
+    </div>
+
+    <div class="slide" id="slide3">
+      <div class="s-eyebrow">PERSONALITY</div>
+      <div class="s-title">Character Traits</div>
+      <div class="s-divider"></div>
+      <div class="trait-grid" id="trait-grid"></div>
+      <div class="dot-row" id="dots3"></div>
+    </div>
+
+    <div class="slide" id="slide4">
+      <div class="s-eyebrow">CHARACTER & VALUES</div>
+      <div class="s-title" id="char-title">Who They Really Were</div>
+      <div class="s-divider"></div>
+      <p class="s-body" id="char-body"></p>
+      <div class="dot-row" id="dots4"></div>
+    </div>
+
+    <div class="slide" id="slide5">
+      <div class="quote-inner">
+        <div class="big-quote">"</div>
+        <p class="quote-body" id="quoteBody">A memorable quote goes here.</p>
+        <p class="quote-attr" id="quoteAttr">— Name</p>
+      </div>
+      <div class="dot-row" id="dots5"></div>
+    </div>
+  </div>
+
+  <!-- Bottom action bar -->
+  <div class="pres-bottombar">
+    <button class="btn-download" id="dlCurrentBtn" onclick="downloadCurrentSlide()">
+      ⬇️ Download This Slide (PDF)
+    </button>
+    <button class="btn-dl-all" onclick="downloadAllSlides()">
+      📄 Download All Slides (PDF)
+    </button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">✅ PDF saved!</div>
+
+<script>
+  const { jsPDF } = window.jspdf;
+  let currentSlide = 1;
+  const TOTAL = 5;
+
+  /* ── Form helpers ── */
+  function pick(fieldId, value, btn) {
+    btn.closest('.btn-options').querySelectorAll('.opt-btn').forEach(b => b.classList.remove('sel'));
+    btn.classList.add('sel');
+    document.getElementById(fieldId).value = value;
+  }
+
+  function addTo(fieldId, text) {
+    const el = document.getElementById(fieldId);
+    const cur = el.value.trim();
+    el.value = cur ? cur + ' ' + text : text;
+  }
+
+  /* ── State ── */
+  let pdfData = {}; // stores slide content for PDF
+
+  /* ── Generate ── */
+  function generatePresentation() {
+    const name       = document.getElementById('fName').value.trim()       || 'Unknown Person';
+    const profession = document.getElementById('fProfession').value.trim() || 'Notable Figure';
+    const born       = document.getElementById('fBorn').value.trim()       || '—';
+    const knownFor   = document.getElementById('fKnownFor').value.trim()   || '';
+    const hair       = document.getElementById('fHair').value.trim();
+    const eyes       = document.getElementById('fEyes').value.trim();
+    const styleField = document.getElementById('fStyle').value.trim();
+    const appearance = document.getElementById('fAppearance').value.trim();
+    const character  = document.getElementById('fCharacter').value.trim();
+    const quote      = document.getElementById('fQuote').value.trim();
+    const firstName  = name.split(' ')[0];
+    const traits     = [...document.querySelectorAll('.trait-tag.sel')];
+
+    // Store for PDF
+    pdfData = { name, profession, born, knownFor, hair, eyes, styleField, appearance, character, quote, firstName };
+
+    // Dots
+    for (let s = 1; s <= TOTAL; s++) {
+      const row = document.getElementById('dots' + s);
+      row.innerHTML = '';
+      for (let i = 1; i <= TOTAL; i++) {
+        const d = document.createElement('div');
+        d.className = 'dot' + (i === s ? ' active' : '');
+        row.appendChild(d);
+      }
+    }
+
+    // Slide 1
+    document.getElementById('cov-eye').textContent = profession.toUpperCase();
+    document.getElementById('cov-name').textContent = name;
+    let para = `This is <strong>${name}</strong>. He/She was a <strong>${profession.toLowerCase()}</strong>. `;
+    if (born && born !== '—') para += `He/She was born in <strong>${born}</strong>. `;
+    if (hair && eyes) para += `He/She had <strong>${hair.toLowerCase()} hair</strong> and <strong>${eyes.toLowerCase()} eyes</strong>. `;
+    else if (hair) para += `He/She had <strong>${hair.toLowerCase()} hair</strong>. `;
+    else if (eyes) para += `He/She had <strong>${eyes.toLowerCase()} eyes</strong>. `;
+    if (knownFor) para += `He/She was known for <strong>${knownFor.toLowerCase()}</strong>.`;
+    document.getElementById('cov-para').innerHTML = para;
+    const meta = document.getElementById('cov-meta');
+    meta.innerHTML = '';
+    [['Born', born], ['Profession', profession], ['Known For', knownFor || '—']].forEach(([lbl, val]) => {
+      meta.innerHTML += `<div class="meta-chip"><span class="chip-lbl">${lbl}</span>${val}</div>`;
+    });
+
+    // Slide 2
+    document.getElementById('app-title').textContent = `How ${firstName} Looked`;
+    document.getElementById('app-body').textContent  = appearance || 'No appearance description provided.';
+    const lg = document.getElementById('looks-grid');
+    lg.innerHTML = '';
+    [['Hair', hair||'—'], ['Eyes', eyes||'—'], ['Style', styleField||'—'], ['Known For', knownFor||'—']].forEach(([lbl, val]) => {
+      lg.innerHTML += `<div class="looks-card"><div class="lc-lbl">${lbl}</div><div class="lc-val">${val}</div></div>`;
+    });
+
+    // Slide 3
+    const tg = document.getElementById('trait-grid');
+    tg.innerHTML = '';
+    const defaults = [
+      { e:'🎨', name:'Creative',   d:'Saw the world through a unique, imaginative lens.' },
+      { e:'🔥', name:'Determined', d:'Never gave up, no matter the obstacle.' },
+      { e:'🌟', name:'Passionate', d:'Pursued their purpose with intense dedication.' }
+    ];
+    const list = traits.length > 0
+      ? traits.map(b => ({ e: b.dataset.e, name: b.textContent.replace(/^.+? /, ''), d: b.dataset.d }))
+      : defaults;
+    list.forEach(t => {
+      tg.innerHTML += `<div class="trait-card"><div class="tc-emoji">${t.e}</div><div class="tc-name">${t.name}</div><div class="tc-desc">${t.d}</div></div>`;
+    });
+    pdfData.traitList = list;
+
+    // Slide 4
+    document.getElementById('char-title').textContent = `The Spirit of ${firstName}`;
+    document.getElementById('char-body').textContent  = character || 'No character description provided.';
+
+    // Slide 5
+    const cleanQ = quote ? quote.replace(/^["'""]|["'""]$/g,'') : `I dream of painting, and then I paint my dream.`;
+    document.getElementById('quoteBody').textContent = cleanQ;
+    document.getElementById('quoteAttr').textContent = `— ${name}`;
+    pdfData.cleanQuote = cleanQ;
+
+    currentSlide = 1;
+    updateSlide();
+    document.getElementById('formPage').style.display = 'none';
+    document.getElementById('presentationPage').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+
+  function updateSlide() {
+    for (let i = 1; i <= TOTAL; i++) {
+      document.getElementById('slide' + i).classList.toggle('active', i === currentSlide);
+    }
+    document.getElementById('slideCounter').textContent = `${currentSlide} / ${TOTAL}`;
+    document.getElementById('nextBtn').textContent = currentSlide === TOTAL ? '↺ Restart' : 'Next →';
+    document.getElementById('dlCurrentBtn').textContent = `⬇️ Download Slide ${currentSlide} (PDF)`;
+  }
+
+  function nextSlide() {
+    currentSlide = currentSlide < TOTAL ? currentSlide + 1 : 1;
+    updateSlide();
+    window.scrollTo(0, 0);
+  }
+
+  function goBack() {
+    document.getElementById('presentationPage').style.display = 'none';
+    document.getElementById('formPage').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (document.getElementById('presentationPage').style.display !== 'none') {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+      if ((e.key === 'ArrowLeft' || e.key === 'ArrowUp') && currentSlide > 1) { currentSlide--; updateSlide(); }
+    }
+  });
+
+  /* ═══════════════════════════════════
+     PDF GENERATION
+  ═══════════════════════════════════ */
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // Wrap text into lines that fit within maxWidth
+  function wrapText(doc, text, x, y, maxWidth, lineHeight) {
+    const lines = doc.splitTextToSize(text, maxWidth);
+    lines.forEach(line => { doc.text(line, x, y); y += lineHeight; });
+    return y;
+  }
+
+  function buildSlide1(doc, d) {
+    const W = 210, H = 297;
+    // background
+    doc.setFillColor(239, 246, 255);
+    doc.rect(0, 0, W, H, 'F');
+    doc.setFillColor(255, 255, 255);
+    doc.roundedRect(10, 10, W-20, H-20, 8, 8, 'F');
+    // accent circle
+    doc.setFillColor(219, 234, 254);
+    doc.circle(W - 20, 30, 45, 'F');
+    // eyebrow
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(59, 130, 246);
+    doc.text(d.profession.toUpperCase(), 25, 45);
+    // name
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(26);
+    doc.setTextColor(30, 58, 95);
+    doc.text(d.name, 25, 62);
+    // divider
+    doc.setDrawColor(59, 130, 246);
+    doc.setLineWidth(1.2);
+    doc.line(25, 68, 75, 68);
+    // paragraph
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.setTextColor(74, 111, 165);
+    const paraText = `This is ${d.name}. He/She was a ${d.profession}. ` +
+      (d.born && d.born !== '—' ? `He/She was born in ${d.born}. ` : '') +
+      (d.hair && d.eyes ? `He/She had ${d.hair} hair and ${d.eyes} eyes. ` : (d.hair ? `He/She had ${d.hair} hair. ` : (d.eyes ? `He/She had ${d.eyes} eyes. ` : ''))) +
+      (d.knownFor ? `He/She was known for ${d.knownFor}.` : '');
+    wrapText(doc, paraText, 25, 82, 160, 7);
+    // chips
+    let cx = 25, cy = 175;
+    doc.setFontSize(9);
+    [['Born', d.born], ['Profession', d.profession], ['Known For', d.knownFor||'—']].forEach(([lbl, val]) => {
+      doc.setFillColor(239, 246, 255);
+      doc.roundedRect(cx, cy, 55, 20, 4, 4, 'F');
+      doc.setFont('helvetica', 'bold'); doc.setTextColor(59, 130, 246);
+      doc.text(lbl.toUpperCase(), cx+4, cy+7);
+      doc.setFont('helvetica', 'normal'); doc.setTextColor(30, 58, 95);
+      doc.text(String(val).substring(0,20), cx+4, cy+15);
+      cx += 60;
+    });
+    // slide number
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(180, 180, 200);
+    doc.text('Slide 1 of 5', W/2, H-10, { align:'center' });
+  }
+
+  function buildSlide2(doc, d) {
+    const W = 210, H = 297;
+    doc.setFillColor(239, 246, 255); doc.rect(0,0,W,H,'F');
+    doc.setFillColor(255,255,255); doc.roundedRect(10,10,W-20,H-20,8,8,'F');
+    doc.setFillColor(219,234,254); doc.circle(W-20,30,45,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(59,130,246);
+    doc.text('PHYSICAL APPEARANCE', 25, 45);
+    doc.setFontSize(22); doc.setTextColor(30,58,95);
+    doc.text(`How ${d.firstName} Looked`, 25, 60);
+    doc.setDrawColor(59,130,246); doc.setLineWidth(1.2); doc.line(25,66,75,66);
+    // body text
+    doc.setFont('helvetica','normal'); doc.setFontSize(11); doc.setTextColor(74,111,165);
+    let y = wrapText(doc, d.appearance || 'No appearance description provided.', 25, 80, 160, 7);
+    // cards grid
+    y = Math.max(y + 10, 120);
+    const cards = [['Hair', d.hair||'—'], ['Eyes', d.eyes||'—'], ['Style', d.styleField||'—'], ['Known For', d.knownFor||'—']];
+    cards.forEach(([lbl, val], i) => {
+      const cx = 25 + (i % 2) * 85, cy = y + Math.floor(i/2) * 32;
+      doc.setFillColor(239,246,255); doc.roundedRect(cx, cy, 78, 26, 4,4,'F');
+      doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(59,130,246);
+      doc.text(lbl.toUpperCase(), cx+4, cy+9);
+      doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(30,58,95);
+      doc.text(String(val).substring(0,28), cx+4, cy+19);
+    });
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(180,180,200);
+    doc.text('Slide 2 of 5', W/2, H-10, {align:'center'});
+  }
+
+  function buildSlide3(doc, d) {
+    const W = 210, H = 297;
+    doc.setFillColor(239,246,255); doc.rect(0,0,W,H,'F');
+    doc.setFillColor(255,255,255); doc.roundedRect(10,10,W-20,H-20,8,8,'F');
+    doc.setFillColor(219,234,254); doc.circle(W-20,30,45,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(59,130,246);
+    doc.text('PERSONALITY', 25, 45);
+    doc.setFontSize(22); doc.setTextColor(30,58,95); doc.text('Character Traits', 25, 60);
+    doc.setDrawColor(59,130,246); doc.setLineWidth(1.2); doc.line(25,66,75,66);
+    const list = d.traitList || [];
+    list.forEach((t, i) => {
+      const cx = 25 + (i%2)*88, cy = 78 + Math.floor(i/2)*40;
+      if (cy > H - 30) return;
+      doc.setFillColor(239,246,255); doc.roundedRect(cx, cy, 82, 34, 4,4,'F');
+      doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(30,58,95);
+      doc.text(t.name, cx+8, cy+13);
+      doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(100,160,200);
+      doc.text(doc.splitTextToSize(t.d, 68)[0], cx+8, cy+23);
+    });
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(180,180,200);
+    doc.text('Slide 3 of 5', W/2, H-10, {align:'center'});
+  }
+
+  function buildSlide4(doc, d) {
+    const W = 210, H = 297;
+    doc.setFillColor(239,246,255); doc.rect(0,0,W,H,'F');
+    doc.setFillColor(255,255,255); doc.roundedRect(10,10,W-20,H-20,8,8,'F');
+    doc.setFillColor(219,234,254); doc.circle(W-20,30,45,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(59,130,246);
+    doc.text('CHARACTER & VALUES', 25, 45);
+    doc.setFontSize(22); doc.setTextColor(30,58,95);
+    doc.text(`The Spirit of ${d.firstName}`, 25, 60);
+    doc.setDrawColor(59,130,246); doc.setLineWidth(1.2); doc.line(25,66,75,66);
+    doc.setFont('helvetica','normal'); doc.setFontSize(11); doc.setTextColor(74,111,165);
+    wrapText(doc, d.character || 'No character description provided.', 25, 80, 160, 7);
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(180,180,200);
+    doc.text('Slide 4 of 5', W/2, H-10, {align:'center'});
+  }
+
+  function buildSlide5(doc, d) {
+    const W = 210, H = 297;
+    doc.setFillColor(239,246,255); doc.rect(0,0,W,H,'F');
+    doc.setFillColor(255,255,255); doc.roundedRect(10,10,W-20,H-20,8,8,'F');
+    doc.setFillColor(219,234,254); doc.circle(W-20,30,45,'F');
+    // big quote mark
+    doc.setFont('helvetica','bold'); doc.setFontSize(72); doc.setTextColor(147,197,253);
+    doc.text('"', W/2-8, H/2 - 50, {align:'center'});
+    // quote text
+    doc.setFont('helvetica','bolditalic'); doc.setFontSize(14); doc.setTextColor(30,58,95);
+    const lines = doc.splitTextToSize(d.cleanQuote || '', 150);
+    let y = H/2 - 20;
+    lines.forEach(line => { doc.text(line, W/2, y, {align:'center'}); y += 10; });
+    // attribution
+    doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(59,130,246);
+    doc.text(`— ${d.name}`, W/2, y+10, {align:'center'});
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(180,180,200);
+    doc.text('Slide 5 of 5', W/2, H-10, {align:'center'});
+  }
+
+  const slideBuilders = [buildSlide1, buildSlide2, buildSlide3, buildSlide4, buildSlide5];
+
+  function downloadCurrentSlide() {
+    const btn = document.getElementById('dlCurrentBtn');
+    btn.classList.add('loading');
+    btn.textContent = '⏳ Generating…';
+    setTimeout(() => {
+      try {
+        const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+        slideBuilders[currentSlide - 1](doc, pdfData);
+        const fname = `${pdfData.name.replace(/\s+/g,'_')}_Slide${currentSlide}.pdf`;
+        doc.save(fname);
+        showToast(`✅ Slide ${currentSlide} downloaded!`);
+      } catch(e) { showToast('❌ Could not generate PDF'); console.error(e); }
+      btn.classList.remove('loading');
+      btn.textContent = `⬇️ Download Slide ${currentSlide} (PDF)`;
+    }, 80);
+  }
+
+  function downloadAllSlides() {
+    const btn = document.querySelector('.btn-dl-all');
+    btn.style.opacity = '.7'; btn.style.pointerEvents = 'none';
+    btn.textContent = '⏳ Generating all slides…';
+    setTimeout(() => {
+      try {
+        const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+        slideBuilders.forEach((builder, i) => {
+          if (i > 0) doc.addPage();
+          builder(doc, pdfData);
+        });
+        const fname = `${pdfData.name.replace(/\s+/g,'_')}_Presentation.pdf`;
+        doc.save(fname);
+        showToast('✅ All 5 slides downloaded!');
+      } catch(e) { showToast('❌ Could not generate PDF'); console.error(e); }
+      btn.style.opacity = ''; btn.style.pointerEvents = '';
+      btn.textContent = '📄 Download All Slides (PDF)';
+    }, 80);
+  }
+</script>
+</body>
+</html>
