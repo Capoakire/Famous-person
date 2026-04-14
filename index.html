@@ -30,9 +30,6 @@
       min-height: 100vh;
     }
 
-    /* ══════════════════════
-       FORM PAGE
-    ══════════════════════ */
     #formPage {
       max-width: 720px;
       margin: 0 auto;
@@ -45,13 +42,8 @@
       to   { opacity:1; transform:translateY(0); }
     }
 
-    .hero {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-
+    .hero { text-align: center; margin-bottom: 2.5rem; }
     .hero-emoji { font-size: 3rem; display: block; margin-bottom: .5rem; }
-
     .hero h1 {
       font-family: 'Baloo 2', sans-serif;
       font-size: clamp(1.9rem, 5vw, 2.7rem);
@@ -59,17 +51,9 @@
       color: var(--navy);
       line-height: 1.1;
     }
-
     .hero h1 span { color: var(--teal); }
+    .hero p { margin-top: .6rem; color: var(--muted); font-size: 1rem; font-weight: 600; }
 
-    .hero p {
-      margin-top: .6rem;
-      color: var(--muted);
-      font-size: 1rem;
-      font-weight: 600;
-    }
-
-    /* Cards */
     .card {
       background: var(--white);
       border: 2.5px solid var(--border);
@@ -78,11 +62,7 @@
       margin-bottom: 1.1rem;
       transition: border-color .2s, box-shadow .2s;
     }
-
-    .card:focus-within {
-      border-color: var(--sky);
-      box-shadow: 0 0 0 4px rgba(56,189,248,.13);
-    }
+    .card:focus-within { border-color: var(--sky); box-shadow: 0 0 0 4px rgba(56,189,248,.13); }
 
     .card-label {
       display: flex;
@@ -95,7 +75,6 @@
       color: var(--teal);
       margin-bottom: .85rem;
     }
-
     .card-label .licon {
       width: 30px; height: 30px;
       background: var(--sky-lt);
@@ -104,7 +83,6 @@
       font-size: 1rem;
     }
 
-    /* Text inputs */
     .finput {
       width: 100%;
       border: 2px solid var(--border);
@@ -120,14 +98,7 @@
     .finput:focus { border-color: var(--sky); background: var(--white); }
     .finput::placeholder { color: #9DCDE8; }
 
-    /* Option pill buttons */
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .45rem;
-      margin-bottom: .5rem;
-    }
-
+    .pill-row { display: flex; flex-wrap: wrap; gap: .45rem; margin-bottom: .5rem; }
     .pill {
       padding: .42rem 1rem;
       border: 2.5px solid var(--border);
@@ -144,21 +115,6 @@
     .pill:hover { border-color: var(--sky); background: var(--sky-md); }
     .pill.on    { background: var(--teal); border-color: var(--teal); color: var(--white); }
 
-    /* Add-to pills */
-    .add-pill {
-      padding: .4rem .95rem;
-      border: 2px solid var(--border);
-      border-radius: 999px;
-      background: var(--white);
-      color: var(--text);
-      font-family: 'Nunito', sans-serif;
-      font-size: .84rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: all .15s;
-    }
-    .add-pill:hover { border-color: var(--sky); background: var(--sky-md); }
-
     .or-line {
       display: flex; align-items: center; gap: .6rem;
       font-size: .72rem; color: var(--muted); font-weight: 900;
@@ -169,14 +125,7 @@
 
     .hint { font-size: .78rem; color: var(--muted); font-weight: 600; margin-top: .4rem; }
 
-    /* Personality & personality value grids */
-    .cv-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .55rem;
-      margin-bottom: .6rem;
-    }
-
+    .cv-grid { display: flex; flex-wrap: wrap; gap: .55rem; margin-bottom: .6rem; }
     .cv-btn {
       display: flex;
       flex-direction: column;
@@ -200,7 +149,6 @@
     .cv-btn.on  { background: var(--teal); border-color: var(--teal); color: var(--white); }
     .cv-btn.on .cd { color: rgba(255,255,255,.75); }
 
-    /* Generate button */
     .btn-go {
       width: 100%;
       margin-top: 2rem;
@@ -219,14 +167,7 @@
     }
     .btn-go:hover { background: var(--navy); transform: translateY(-2px); }
 
-    /* ══════════════════════
-       PRESENTATION PAGE
-    ══════════════════════ */
-    #presPage {
-      display: none;
-      padding: 2rem 1.5rem 3rem;
-      animation: fadeUp .5s ease both;
-    }
+    #presPage { display: none; padding: 2rem 1.5rem 3rem; animation: fadeUp .5s ease both; }
 
     .topbar {
       display: flex;
@@ -253,7 +194,6 @@
 
     .counter { font-size: .9rem; font-weight: 800; color: var(--muted); }
 
-    /* Slide */
     .wrap { max-width: 780px; margin: 0 auto; }
 
     .slide {
@@ -276,7 +216,6 @@
 
     .slide.active { display: block; }
 
-    /* Decorative blobs */
     .slide::before {
       content:'';
       position: absolute; top:-70px; right:-70px;
@@ -292,7 +231,6 @@
 
     .slide > * { position: relative; z-index: 1; }
 
-    /* Slide content */
     .s-chip {
       display: inline-block;
       background: var(--sky-lt);
@@ -316,14 +254,8 @@
       margin-bottom: .3rem;
     }
 
-    .s-job {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--muted);
-      margin-bottom: 1.4rem;
-    }
+    .s-job { font-size: 1.05rem; font-weight: 700; color: var(--muted); margin-bottom: 1.4rem; }
 
-    /* The big sentence paragraph — simple & readable */
     .s-para {
       font-size: 1.15rem;
       font-weight: 700;
@@ -332,13 +264,6 @@
       max-width: 620px;
     }
 
-    .s-para .highlight {
-      background: var(--sky-md);
-      border-radius: 6px;
-      padding: .05em .3em;
-    }
-
-    /* Dots */
     .dots {
       position: absolute;
       bottom: 1.6rem; left: 50%;
@@ -352,7 +277,6 @@
     }
     .dot.on { background: var(--teal); width: 42px; }
 
-    /* Quote slide */
     .q-wrap {
       display: flex;
       flex-direction: column;
@@ -379,14 +303,8 @@
       line-height: 1.6;
     }
 
-    .q-by {
-      margin-top: 1.2rem;
-      font-size: .95rem;
-      font-weight: 800;
-      color: var(--teal);
-    }
+    .q-by { margin-top: 1.2rem; font-size: .95rem; font-weight: 800; color: var(--teal); }
 
-    /* Bottom download bar */
     .bottombar {
       max-width: 780px;
       margin: 1.3rem auto 0;
@@ -414,7 +332,6 @@
     }
     .btn-dl-all:hover { background: #EA580C; border-color: #EA580C; }
 
-    /* Toast */
     .toast {
       position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
       background: var(--navy); color: white; padding: .7rem 1.6rem;
@@ -432,9 +349,6 @@
 </head>
 <body>
 
-<!-- ═════════════════════════════
-     FORM PAGE
-═════════════════════════════ -->
 <div id="formPage">
   <div class="hero">
     <span class="hero-emoji">🌟</span>
@@ -462,18 +376,18 @@
   <div class="card">
     <div class="card-label"><span class="licon">🎯</span> Job / Profession</div>
     <div class="pill-row">
-      <button class="pill" onclick="pick('fJob','baseball player ⚾',this)">⚾ Baseball Player</button>
-      <button class="pill" onclick="pick('fJob','soccer player ⚽',this)">⚽ Soccer Player</button>
-      <button class="pill" onclick="pick('fJob','basketball player 🏀',this)">🏀 Basketball Player</button>
-      <button class="pill" onclick="pick('fJob','swimmer 🏊',this)">🏊 Swimmer</button>
-      <button class="pill" onclick="pick('fJob','painter 🎨',this)">🎨 Painter</button>
-      <button class="pill" onclick="pick('fJob','scientist 🔬',this)">🔬 Scientist</button>
-      <button class="pill" onclick="pick('fJob','musician 🎵',this)">🎵 Musician</button>
-      <button class="pill" onclick="pick('fJob','writer ✍️',this)">✍️ Writer</button>
-      <button class="pill" onclick="pick('fJob','inventor 💡',this)">💡 Inventor</button>
-      <button class="pill" onclick="pick('fJob','doctor 🩺',this)">🩺 Doctor</button>
-      <button class="pill" onclick="pick('fJob','actor 🎬',this)">🎬 Actor</button>
-      <button class="pill" onclick="pick('fJob','dancer 💃',this)">💃 Dancer</button>
+      <button class="pill" onclick="pick('fJob','baseball player',this)">⚾ Baseball Player</button>
+      <button class="pill" onclick="pick('fJob','soccer player',this)">⚽ Soccer Player</button>
+      <button class="pill" onclick="pick('fJob','basketball player',this)">🏀 Basketball Player</button>
+      <button class="pill" onclick="pick('fJob','swimmer',this)">🏊 Swimmer</button>
+      <button class="pill" onclick="pick('fJob','painter',this)">🎨 Painter</button>
+      <button class="pill" onclick="pick('fJob','scientist',this)">🔬 Scientist</button>
+      <button class="pill" onclick="pick('fJob','musician',this)">🎵 Musician</button>
+      <button class="pill" onclick="pick('fJob','writer',this)">✍️ Writer</button>
+      <button class="pill" onclick="pick('fJob','inventor',this)">💡 Inventor</button>
+      <button class="pill" onclick="pick('fJob','doctor',this)">🩺 Doctor</button>
+      <button class="pill" onclick="pick('fJob','actor',this)">🎬 Actor</button>
+      <button class="pill" onclick="pick('fJob','dancer',this)">💃 Dancer</button>
     </div>
     <div class="or-line">or type your own</div>
     <input id="fJob" class="finput" type="text" placeholder="e.g. baseball player">
@@ -483,20 +397,20 @@
   <div class="card">
     <div class="card-label"><span class="licon">🌍</span> Country</div>
     <div class="pill-row">
-      <button class="pill" onclick="pick('fCountry','Japan 🇯🇵',this)">🇯🇵 Japan</button>
-      <button class="pill" onclick="pick('fCountry','the USA 🇺🇸',this)">🇺🇸 USA</button>
-      <button class="pill" onclick="pick('fCountry','Brazil 🇧🇷',this)">🇧🇷 Brazil</button>
-      <button class="pill" onclick="pick('fCountry','France 🇫🇷',this)">🇫🇷 France</button>
-      <button class="pill" onclick="pick('fCountry','the UK 🇬🇧',this)">🇬🇧 UK</button>
-      <button class="pill" onclick="pick('fCountry','Germany 🇩🇪',this)">🇩🇪 Germany</button>
-      <button class="pill" onclick="pick('fCountry','Spain 🇪🇸',this)">🇪🇸 Spain</button>
-      <button class="pill" onclick="pick('fCountry','China 🇨🇳',this)">🇨🇳 China</button>
-      <button class="pill" onclick="pick('fCountry','India 🇮🇳',this)">🇮🇳 India</button>
-      <button class="pill" onclick="pick('fCountry','South Korea 🇰🇷',this)">🇰🇷 South Korea</button>
-      <button class="pill" onclick="pick('fCountry','Mexico 🇲🇽',this)">🇲🇽 Mexico</button>
-      <button class="pill" onclick="pick('fCountry','Australia 🇦🇺',this)">🇦🇺 Australia</button>
-      <button class="pill" onclick="pick('fCountry','Italy 🇮🇹',this)">🇮🇹 Italy</button>
-      <button class="pill" onclick="pick('fCountry','the Netherlands 🇳🇱',this)">🇳🇱 Netherlands</button>
+      <button class="pill" onclick="pick('fCountry','Japan',this)">🇯🇵 Japan</button>
+      <button class="pill" onclick="pick('fCountry','the USA',this)">🇺🇸 USA</button>
+      <button class="pill" onclick="pick('fCountry','Brazil',this)">🇧🇷 Brazil</button>
+      <button class="pill" onclick="pick('fCountry','France',this)">🇫🇷 France</button>
+      <button class="pill" onclick="pick('fCountry','the UK',this)">🇬🇧 UK</button>
+      <button class="pill" onclick="pick('fCountry','Germany',this)">🇩🇪 Germany</button>
+      <button class="pill" onclick="pick('fCountry','Spain',this)">🇪🇸 Spain</button>
+      <button class="pill" onclick="pick('fCountry','China',this)">🇨🇳 China</button>
+      <button class="pill" onclick="pick('fCountry','India',this)">🇮🇳 India</button>
+      <button class="pill" onclick="pick('fCountry','South Korea',this)">🇰🇷 South Korea</button>
+      <button class="pill" onclick="pick('fCountry','Mexico',this)">🇲🇽 Mexico</button>
+      <button class="pill" onclick="pick('fCountry','Australia',this)">🇦🇺 Australia</button>
+      <button class="pill" onclick="pick('fCountry','Italy',this)">🇮🇹 Italy</button>
+      <button class="pill" onclick="pick('fCountry','the Netherlands',this)">🇳🇱 Netherlands</button>
     </div>
     <div class="or-line">or type your own</div>
     <input id="fCountry" class="finput" type="text" placeholder="e.g. Japan">
@@ -672,9 +586,6 @@
 </div>
 
 
-<!-- ═════════════════════════════
-     PRESENTATION PAGE
-═════════════════════════════ -->
 <div id="presPage">
   <div class="topbar">
     <button class="bsm bsm-out" onclick="goBack()">← Edit</button>
@@ -684,34 +595,30 @@
 
   <div class="wrap">
 
-    <!-- Slide 1: Introduction -->
     <div class="slide active" id="sl1">
-      <div class="s-chip">⭐ Introduction</div>
+      <div class="s-chip">★ Introduction</div>
       <div class="s-name" id="sl1-name"></div>
       <div class="s-job"  id="sl1-job"></div>
       <p class="s-para"   id="sl1-para"></p>
       <div class="dots"   id="d1"></div>
     </div>
 
-    <!-- Slide 2: Appearance -->
     <div class="slide" id="sl2">
-      <div class="s-chip">👀 Appearance</div>
+      <div class="s-chip">Appearance</div>
       <div class="s-name" id="sl2-name"></div>
       <p class="s-para"   id="sl2-para"></p>
       <div class="dots"   id="d2"></div>
     </div>
 
-    <!-- Slide 3: Personality -->
     <div class="slide" id="sl3">
-      <div class="s-chip">💖 Personality</div>
+      <div class="s-chip">Personality</div>
       <div class="s-name" id="sl3-name"></div>
       <p class="s-para"   id="sl3-para"></p>
       <div class="dots"   id="d3"></div>
     </div>
 
-    <!-- Slide 4: Quote -->
     <div class="slide" id="sl4">
-      <div class="s-chip">💬 Famous Quote</div>
+      <div class="s-chip">Famous Quote</div>
       <div class="q-wrap">
         <div class="q-mark">"</div>
         <p class="q-text" id="sl4-quote"></p>
@@ -720,12 +627,11 @@
       <div class="dots" id="d4"></div>
     </div>
 
-  </div><!-- .wrap -->
+  </div>
 
-  <!-- Download buttons -->
   <div class="bottombar">
-    <button class="btn-dl"     id="dlCurrent" onclick="dlCurrent()">⬇️ Download This Slide (PDF)</button>
-    <button class="btn-dl-all"                onclick="dlAll()">📄 Download All Slides (PDF)</button>
+    <button class="btn-dl"     id="dlCurrent" onclick="dlCurrent()">Download This Slide (PDF)</button>
+    <button class="btn-dl-all"                onclick="dlAll()">Download All Slides (PDF)</button>
   </div>
 </div>
 
@@ -734,14 +640,12 @@
 <script>
   const { jsPDF } = window.jspdf;
 
-  /* ── State ── */
   let pronSub  = 'He';
   let pronPoss = 'His';
   let curSlide = 1;
   const TOTAL  = 4;
-  let G = {}; // generated data for PDF
+  let G = {};
 
-  /* ── Pronoun ── */
   function setPron(p) {
     document.getElementById('pronHe').classList.remove('on');
     document.getElementById('pronShe').classList.remove('on');
@@ -751,14 +655,27 @@
     if (p === 'they') { pronSub='They'; pronPoss='Their'; document.getElementById('pronThy').classList.add('on'); }
   }
 
-  /* ── Pick single option ── */
   function pick(id, val, btn) {
     btn.closest('.pill-row').querySelectorAll('.pill').forEach(b => b.classList.remove('on'));
     btn.classList.add('on');
     document.getElementById(id).value = val;
   }
 
-  /* ── Generate ── */
+  /* Strip all emoji / non-latin characters that jsPDF cannot render */
+  function pdfSafe(str) {
+    return str
+      /* remove emoji and symbols in common Unicode ranges */
+      .replace(/[\u{1F000}-\u{1FFFF}]/gu, '')
+      .replace(/[\u{2600}-\u{27BF}]/gu, '')
+      .replace(/[\u{1F300}-\u{1F9FF}]/gu, '')
+      .replace(/[\u{FE00}-\u{FEFF}]/gu, '')
+      /* flag emoji (pairs of regional indicators) */
+      .replace(/[\u{1F1E0}-\u{1F1FF}]{2}/gu, '')
+      /* any remaining non-ASCII characters */
+      .replace(/[^\x00-\x7F]/g, '')
+      .trim();
+  }
+
   function generate() {
     const name     = document.getElementById('fName').value.trim()     || 'This Person';
     const job      = document.getElementById('fJob').value.trim()      || 'famous person';
@@ -771,22 +688,17 @@
     const activity = document.getElementById('fActivity').value.trim() || '';
     const rawQuote = document.getElementById('fQuote').value.trim();
 
-    // Personality words
     const persSelected = [...document.querySelectorAll('#persTags .cv-btn.on')].map(b => b.dataset.word);
     const persStr = persSelected.length > 0
       ? persSelected.slice(0,-1).join(', ') + (persSelected.length > 1 ? ' and ' + persSelected[persSelected.length-1] : '')
       : 'talented';
 
-    const cleanQuote = rawQuote ? rawQuote.replace(/^["'""]|["'""]$/g, '') : '';
+    const cleanQuote = rawQuote ? rawQuote.replace(/^["'\u201C\u201D]|["'\u201C\u201D]$/g, '') : '';
 
-    // ── Build slide sentences ──
-
-    // Slide 1: Introduction
     let s1 = `${pronPoss} name is ${name}.`;
     if (country) s1 += ` ${pronSub} is from ${country}.`;
     s1 += ` ${pronSub} is a ${job}.`;
 
-    // Slide 2: Appearance
     let s2Parts = [];
     if (hair && smile) s2Parts.push(`${pronSub} has ${hair} and ${smile}.`);
     else if (hair)     s2Parts.push(`${pronSub} has ${hair}.`);
@@ -801,33 +713,24 @@
     }
     const s2 = s2Parts.join('\n') || `${pronSub} has a very distinctive appearance.`;
 
-    // Slide 3: Personality
     const s3 = `${pronSub} is ${persStr}.`;
-
-    // Slide 4: Quote
     const quote = cleanQuote || `I always try my best every single day.`;
     const quoteFull = `"${quote}"`;
 
-    // Save data
     G = { name, job, country, s1, s2, s3, quote, quoteFull, pronSub, pronPoss, persStr };
 
-    // ── Populate slides ──
     setDots();
 
-    // Slide 1
     document.getElementById('sl1-name').textContent = name;
     document.getElementById('sl1-job').textContent  = `${job}${country ? ' · ' + country : ''}`;
     renderPara('sl1-para', s1);
 
-    // Slide 2
     document.getElementById('sl2-name').textContent = 'Appearance';
     renderPara('sl2-para', s2);
 
-    // Slide 3
     document.getElementById('sl3-name').textContent = 'Personality';
     renderPara('sl3-para', s3);
 
-    // Slide 4
     document.getElementById('sl4-quote').textContent = quote;
     document.getElementById('sl4-by').textContent    = `— ${name}`;
 
@@ -838,7 +741,6 @@
     window.scrollTo(0, 0);
   }
 
-  /* Render para with line breaks */
   function renderPara(id, text) {
     const el = document.getElementById(id);
     el.innerHTML = '';
@@ -866,7 +768,7 @@
     }
     document.getElementById('counter').textContent = `${curSlide} / ${TOTAL}`;
     document.getElementById('nextBtn').textContent = curSlide === TOTAL ? '↺ Start Over' : 'Next →';
-    document.getElementById('dlCurrent').textContent = `⬇️ Download Slide ${curSlide} (PDF)`;
+    document.getElementById('dlCurrent').textContent = `Download Slide ${curSlide} (PDF)`;
   }
 
   function nextSlide() {
@@ -888,9 +790,7 @@
     }
   });
 
-  /* ══════════════════════════════
-     PDF GENERATION
-  ══════════════════════════════ */
+  /* ── PDF helpers ── */
   function toast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg; t.classList.add('show');
@@ -899,9 +799,10 @@
 
   function wrapLines(doc, text, x, y, maxW, lh) {
     text.split('\n').forEach(chunk => {
-      const lines = doc.splitTextToSize(chunk, maxW);
+      const safe = pdfSafe(chunk);
+      const lines = doc.splitTextToSize(safe, maxW);
       lines.forEach(l => { doc.text(l, x, y); y += lh; });
-      y += 2; // small gap between sentences
+      y += 2;
     });
     return y;
   }
@@ -910,40 +811,39 @@
     const W=210, H=297;
     doc.setFillColor(224,247,255); doc.rect(0,0,W,H,'F');
     doc.setFillColor(255,255,255); doc.roundedRect(10,10,W-20,H-20,10,10,'F');
-    // blobs
     doc.setFillColor(186,230,253); doc.circle(W-15,25,50,'F');
     doc.setFillColor(186,230,253); doc.circle(15,H-15,38,'F');
     return {W,H};
   }
 
+  function drawChip(doc, label, x, y) {
+    const w = doc.getStringUnitWidth(label) * 7.5 / doc.internal.scaleFactor + 10;
+    doc.setFillColor(224,247,255);
+    doc.roundedRect(x, y-6, w, 10, 3, 3, 'F');
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(7.5);
+    doc.setTextColor(14,165,233);
+    doc.text(label, x+5, y);
+  }
+
   function pdfSlide1(doc, d) {
     const {W,H} = pdfBase(doc);
-    // chip
-    doc.setFillColor(224,247,255); doc.roundedRect(25,30,52,10,4,4,'F');
-    doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(14,165,233);
-    doc.text('⭐ INTRODUCTION', 29, 37);
-    // name
+    drawChip(doc, 'INTRODUCTION', 25, 37);
     doc.setFont('helvetica','bold'); doc.setFontSize(28); doc.setTextColor(12,74,110);
-    doc.text(d.name, 25, 60);
-    // job / country
+    doc.text(pdfSafe(d.name), 25, 60);
     doc.setFont('helvetica','normal'); doc.setFontSize(11); doc.setTextColor(100,170,204);
-    doc.text(d.job + (d.country ? ' · ' + d.country : ''), 25, 72);
-    // divider
+    doc.text(pdfSafe(d.job + (d.country ? ' - ' + d.country : '')), 25, 72);
     doc.setDrawColor(186,230,253); doc.setLineWidth(1); doc.line(25,78,W-25,78);
-    // paragraph
     doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(12,74,110);
     wrapLines(doc, d.s1, 25, 92, W-50, 8);
-    // page num
     doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(186,230,253);
     doc.text('1 / 4', W/2, H-10, {align:'center'});
   }
 
   function pdfSlide2(doc, d) {
     const {W,H} = pdfBase(doc);
-    doc.setFillColor(224,247,255); doc.roundedRect(25,30,48,10,4,4,'F');
-    doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(14,165,233);
-    doc.text('👀 APPEARANCE', 29, 37);
-    doc.setFontSize(24); doc.setTextColor(12,74,110);
+    drawChip(doc, 'APPEARANCE', 25, 37);
+    doc.setFont('helvetica','bold'); doc.setFontSize(24); doc.setTextColor(12,74,110);
     doc.text('Appearance', 25, 58);
     doc.setDrawColor(186,230,253); doc.setLineWidth(1); doc.line(25,64,W-25,64);
     doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(12,74,110);
@@ -954,10 +854,8 @@
 
   function pdfSlide3(doc, d) {
     const {W,H} = pdfBase(doc);
-    doc.setFillColor(224,247,255); doc.roundedRect(25,30,48,10,4,4,'F');
-    doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(14,165,233);
-    doc.text('💖 PERSONALITY', 29, 37);
-    doc.setFontSize(24); doc.setTextColor(12,74,110);
+    drawChip(doc, 'PERSONALITY', 25, 37);
+    doc.setFont('helvetica','bold'); doc.setFontSize(24); doc.setTextColor(12,74,110);
     doc.text('Personality', 25, 58);
     doc.setDrawColor(186,230,253); doc.setLineWidth(1); doc.line(25,64,W-25,64);
     doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(12,74,110);
@@ -968,20 +866,22 @@
 
   function pdfSlide4(doc, d) {
     const {W,H} = pdfBase(doc);
-    doc.setFillColor(224,247,255); doc.roundedRect(25,30,52,10,4,4,'F');
-    doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(14,165,233);
-    doc.text('💬 FAMOUS QUOTE', 29, 37);
-    // big quote mark
-    doc.setFont('helvetica','bold'); doc.setFontSize(80); doc.setTextColor(186,230,253);
-    doc.text('"', W/2-8, H/2-40, {align:'center'});
-    // quote
+    drawChip(doc, 'FAMOUS QUOTE', 25, 37);
+    /* big decorative quote mark using a simple shape instead of glyph */
+    doc.setFillColor(186,230,253);
+    /* left serif bar */
+    doc.rect(W/2-22, H/2-60, 12, 5, 'F');
+    doc.rect(W/2-22, H/2-55, 5, 15, 'F');
+    /* right serif bar */
+    doc.rect(W/2+10, H/2-60, 12, 5, 'F');
+    doc.rect(W/2+17, H/2-55, 5, 15, 'F');
+
     doc.setFont('helvetica','bolditalic'); doc.setFontSize(14); doc.setTextColor(12,74,110);
-    const lines = doc.splitTextToSize(d.quote, 155);
+    const lines = doc.splitTextToSize(pdfSafe(d.quote), 155);
     let y = H/2 - 20;
     lines.forEach(l => { doc.text(l, W/2, y, {align:'center'}); y += 10; });
-    // by
     doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(14,165,233);
-    doc.text('— ' + d.name, W/2, y+8, {align:'center'});
+    doc.text('— ' + pdfSafe(d.name), W/2, y+8, {align:'center'});
     doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(186,230,253);
     doc.text('4 / 4', W/2, H-10, {align:'center'});
   }
@@ -992,18 +892,18 @@
     try {
       const doc = new jsPDF({unit:'mm', format:'a4'});
       builders[curSlide-1](doc, G);
-      doc.save(`${G.name.replace(/\s+/g,'_')}_Slide${curSlide}.pdf`);
-      toast(`✅ Slide ${curSlide} downloaded!`);
-    } catch(e) { toast('❌ Error generating PDF'); console.error(e); }
+      doc.save(`${pdfSafe(G.name).replace(/\s+/g,'_') || 'Slide'}_Slide${curSlide}.pdf`);
+      toast('Slide ' + curSlide + ' downloaded!');
+    } catch(e) { toast('Error generating PDF'); console.error(e); }
   }
 
   function dlAll() {
     try {
       const doc = new jsPDF({unit:'mm', format:'a4'});
       builders.forEach((b,i) => { if(i>0) doc.addPage(); b(doc,G); });
-      doc.save(`${G.name.replace(/\s+/g,'_')}_Presentation.pdf`);
-      toast('✅ All 4 slides downloaded!');
-    } catch(e) { toast('❌ Error generating PDF'); console.error(e); }
+      doc.save(`${pdfSafe(G.name).replace(/\s+/g,'_') || 'Presentation'}_Presentation.pdf`);
+      toast('All 4 slides downloaded!');
+    } catch(e) { toast('Error generating PDF'); console.error(e); }
   }
 </script>
 </body>
